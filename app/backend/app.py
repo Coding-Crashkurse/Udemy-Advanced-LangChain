@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import os
 import redis
+import uuid
 import json
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import find_dotenv, load_dotenv
@@ -43,7 +44,16 @@ store = PGVector(
 )
 retriever = store.as_retriever()
 
-# Chain logic
+from langchain.prompts.prompt import PromptTemplate
+
+rephrase_template = """Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language.
+
+Chat History:
+{chat_history}
+Follow Up Input: {question}
+Standalone question:"""
+REPHRASE_TEMPLATE = PromptTemplate.from_template(rephrase_template)
+
 template = """Answer the question based only on the following context:
 {context}
 
@@ -51,7 +61,7 @@ Question: {question}
 """
 ANSWER_PROMPT = ChatPromptTemplate.from_template(template)
 
-rephrase_chain = StrOutputParser() | ChatOpenAI(temperature=0) | StrOutputParser()
+rephrase_chain = REPHRASE_TEMPLATE | ChatOpenAI(temperature=0) | StrOutputParser()
 
 retrieval_chain = (
     {"context": retriever, "question": RunnablePassthrough()}
@@ -96,12 +106,11 @@ async def conversation(conversation_id: str, question: Question):
         for msg in chat_history
     ]
 
-    chat_history_formatted.append(HumanMessage(content=question.question))
-
     chain_input = {
         "question": question.question,
         "chat_history": chat_history_formatted,
     }
+    logger.info(f"Conversation ID: {conversation_id}, Chain Input: {chain_input}")
 
     response = final_chain.invoke(chain_input)
 
@@ -109,5 +118,20 @@ async def conversation(conversation_id: str, question: Question):
     chat_history.append({"role": "assistant", "content": response})
 
     redis_client.set(conversation_id, json.dumps(chat_history))
+    print(chat_history)
+    return {"response": chat_history}
 
-    return {"response": response}
+
+@app.post("/start_conversation")
+async def start_conversation():
+    conversation_id = str(uuid.uuid4())
+    redis_client.set(conversation_id, json.dumps([]))
+    return {"conversation_id": conversation_id}
+
+
+@app.delete("/end_conversation/{conversation_id}")
+async def end_conversation(conversation_id: str):
+    if not redis_client.exists(conversation_id):
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    redis_client.delete(conversation_id)
+    return {"message": "Conversation deleted"}
