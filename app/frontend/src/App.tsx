@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import ChatModal from "./components/ChatModal";
+import IconButton from "@mui/material/IconButton";
+import Avatar from "@mui/material/Avatar";
+import chefIcon from "./assets/chef.jpg"; // Make sure the path is correct
 
 import "./App.css";
 
@@ -32,9 +35,36 @@ function App() {
   return (
     <div className="App">
       <div className="background"></div>
-
-      <button onClick={handleOpenModal}>Open Chat</button>
-
+      <div className="intro-container">
+        <h1>Welcome to Chef Amico's Italian Kitchen</h1>
+        <p>
+          Join us for an authentic Italian dining experience. Our chatbot is
+          ready to assist with recommendations and answer any questions you may
+          have.
+        </p>
+      </div>
+      <IconButton
+        onClick={handleOpenModal}
+        style={{
+          position: "fixed",
+          bottom: 20,
+          right: 20,
+          backgroundColor: "#fff",
+          borderRadius: "50%",
+          width: "150px",
+          height: "150px",
+          padding: 0,
+        }}
+      >
+        <Avatar
+          src={chefIcon}
+          alt="Open Chat"
+          style={{
+            width: "150px",
+            height: "150px",
+          }}
+        />
+      </IconButton>
       {isModalOpen && (
         <ChatModal
           open={isModalOpen}

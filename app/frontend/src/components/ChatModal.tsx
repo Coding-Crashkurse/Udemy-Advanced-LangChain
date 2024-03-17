@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import {
   Modal,
   Box,
+  Typography,
   TextField,
   Button,
   CircularProgress,
-  SxProps,
-  Theme,
+  IconButton,
+  Avatar,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import chefImage from "../assets/chef.jpg"; // Make sure the path is correct
 
 import ChatMessage from "./ChatMessage";
 
@@ -19,12 +22,34 @@ interface ChatModalProps {
 
 const ChatModal: React.FC<ChatModalProps> = ({
   open,
-  handleClose,
+  handleClose: closeCallback,
   conversationId,
 }) => {
   const [message, setMessage] = useState<string>("");
   const [chatHistory, setChatHistory] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleCloseWithDelete = async () => {
+    setIsLoading(true);
+    // Call the API to end the conversation
+    try {
+      const response = await fetch(
+        `http://localhost:8000/end_conversation/${conversationId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (response.ok) {
+        console.log("Conversation ended successfully.");
+      } else {
+        console.error("Error ending the conversation.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    setIsLoading(false);
+    closeCallback(); // Close the modal
+  };
 
   const handleSend = async () => {
     setIsLoading(true);
@@ -48,7 +73,7 @@ const ChatModal: React.FC<ChatModalProps> = ({
     setIsLoading(false);
   };
 
-  const modalStyle: SxProps<Theme> = {
+  const modalStyle = {
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -59,14 +84,48 @@ const ChatModal: React.FC<ChatModalProps> = ({
     p: 4,
   };
 
+  const headerStyle = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    position: "relative",
+    mb: 2,
+  };
+
+  const closeButtonStyle = {
+    position: "absolute",
+    top: 2,
+    right: 2,
+    transition: "transform 0.3s ease-in-out", // Updated transition
+    "&:hover": {
+      transform: "rotate(180deg)", // Spin effect
+      backgroundColor: "rgba(255, 255, 255, 0.3)",
+    },
+  };
+
   return (
     <Modal
       open={open}
-      onClose={handleClose}
+      onClose={handleCloseWithDelete}
       aria-labelledby="chat-modal"
       aria-describedby="chat-modal-for-sending-messages"
+      BackdropProps={{
+        onClick: (event) => {
+          event.stopPropagation();
+        },
+      }}
     >
       <Box sx={modalStyle}>
+        <Box sx={headerStyle}>
+          <p>ffsdf</p>
+          <Avatar src={chefImage} sx={{ width: 100, height: 100, mb: 1 }} />
+          <Typography variant="h6" component="h2">
+            Chat with Chef Amico!
+          </Typography>
+          <IconButton onClick={handleCloseWithDelete} sx={closeButtonStyle}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
         <Box sx={{ maxHeight: 300, overflow: "auto", mb: 2 }}>
           {chatHistory.map((msg, index) => (
             <ChatMessage
@@ -77,7 +136,7 @@ const ChatModal: React.FC<ChatModalProps> = ({
           ))}
         </Box>
         <TextField
-          label="Type your message"
+          label="Enter text..."
           fullWidth
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -97,8 +156,13 @@ const ChatModal: React.FC<ChatModalProps> = ({
             }}
           />
         ) : (
-          <Button variant="contained" color="primary" onClick={handleSend}>
-            Send
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSend}
+            style={{ backgroundColor: "darkblue", color: "white" }}
+          >
+            Send Request
           </Button>
         )}
       </Box>

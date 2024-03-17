@@ -21,14 +21,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ isUser, text }) => {
     width: "50px",
     height: "50px",
     objectFit: "cover",
-    margin: "0 10px", // Add some margin around the image
+    margin: "0 10px",
   };
 
   const textStyle: React.CSSProperties = {
     maxWidth: "70%",
     padding: "10px",
     borderRadius: "15px",
-    backgroundColor: isUser ? "blue" : "grey", // Replace with actual colors
+    backgroundColor: isUser ? "darkblue" : "grey",
     color: "white",
   };
 
