@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+redis
+requests
+openai
+tiktoken
+langchain
+langchain_openai
+python-dotenv
+postgres
+psycopg2-binary
+pgvector
+nemoguardrails[openai]==0.8.2
+sentence_transformers

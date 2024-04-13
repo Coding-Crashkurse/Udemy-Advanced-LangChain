@@ -1,0 +1,15 @@
+models:
+  - type: main
+    engine: openai
+    model: gpt-3.5-turbo-instruct
+  - type: embeddings
+    engine: openai
+    model: text-embedding-ada-002
+
+rails:
+  input:
+    flows:
+      - self check input
+  output:
+    flows:
+      - self check output

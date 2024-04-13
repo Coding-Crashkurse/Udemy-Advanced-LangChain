@@ -1,0 +1,5 @@
+define flow self check input
+  bot refuse answer
+
+define bot refuse answer
+  "Sorry, that's like asking for pineapple on pizza in this Italian bot's code of honor. Can't do it!"

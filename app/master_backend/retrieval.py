@@ -19,8 +19,16 @@ from sentence_transformers import CrossEncoder
 from langchain_core.runnables import RunnableLambda, RunnableParallel
 
 
-DATABASE_URL = "postgresql+psycopg2://admin:admin@localhost:5432/vectordb"
-retriever = create_retriever(DATABASE_URL)
+db_user = os.getenv("DB_USER", "user")
+db_password = os.getenv("DB_PASSWORD", "password")
+db_host = os.getenv("DB_HOST", "127.0.0.1")
+db_port = os.getenv("DB_PORT", "5432")
+db_name = os.getenv("DB_NAME", "restaurant")
+
+CONNECTION_STRING = (
+    f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+)
+retriever = create_retriever(CONNECTION_STRING)
 
 from langchain.prompts.prompt import PromptTemplate
 
