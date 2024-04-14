@@ -55,18 +55,9 @@ async def conversation(conversation_id: str, question: Question):
 
     chat_history = json.loads(conversation_history_json.decode("utf-8"))
 
-    chat_history_formatted = [
-        (
-            HumanMessage(content=msg["content"])
-            if msg["role"] == "human"
-            else AIMessage(content=msg["content"])
-        )
-        for msg in chat_history
-    ]
-
     chain_input = {
         "question": question.question,
-        "chat_history": chat_history_formatted,
+        "chat_history": chat_history,
     }
     logger.info(f"Conversation ID: {conversation_id}, Chain Input: {chain_input}")
 

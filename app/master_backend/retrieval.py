@@ -17,18 +17,28 @@ from langchain_core.runnables import RunnablePassthrough
 import logging
 from sentence_transformers import CrossEncoder
 from langchain_core.runnables import RunnableLambda, RunnableParallel
+from langchain_community.document_loaders import TextLoader
 
 
-db_user = os.getenv("DB_USER", "user")
-db_password = os.getenv("DB_PASSWORD", "password")
+db_user = os.getenv("DB_USER", "admin")
+db_password = os.getenv("DB_PASSWORD", "admin")
 db_host = os.getenv("DB_HOST", "127.0.0.1")
 db_port = os.getenv("DB_PORT", "5432")
-db_name = os.getenv("DB_NAME", "restaurant")
+db_name = os.getenv("DB_NAME", "vectordb")
 
 CONNECTION_STRING = (
     f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 )
 retriever = create_retriever(CONNECTION_STRING)
+
+loader1 = TextLoader("./data/food.txt")
+loader2 = TextLoader("./data/founder.txt")
+
+docs2 = loader1.load()
+docs1 = loader2.load()
+docs = docs1 + docs2
+
+retriever.add_documents(docs, ids=None)
 
 from langchain.prompts.prompt import PromptTemplate
 
@@ -78,11 +88,23 @@ model_chain = prompt | model | StrOutputParser()
 
 rag_chain = RunnableParallel({"context": retriever, "question": RunnablePassthrough()})
 
-full_chain = rephrase_chain | rag_chain | rerank_chain | model_chain
+
+def debug_chain(input):
+    print("INPUT: ", input)
+    return input
+
+
+full_chain = (
+    rephrase_chain
+    | rag_chain
+    | RunnableLambda(debug_chain)
+    | rerank_chain
+    | model_chain
+)
 
 if __name__ == "__main__":
-    try:
-        result = full_chain.invoke(
+    print(
+        full_chain.invoke(
             {
                 "question": "No, really?",
                 "chat_history": [
@@ -91,6 +113,4 @@ if __name__ == "__main__":
                 ],
             }
         )
-        print(result)
-    except:
-        print("An error occurred")
+    )

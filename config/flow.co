@@ -1,5 +1,9 @@
 define flow self check input
-  bot refuse answer
+  $allowed = execute self_check_input
 
-define bot refuse answer
-  "Sorry, that's like asking for pineapple on pizza in this Italian bot's code of honor. Can't do it!"
+  if not $allowed
+    bot refuse to respond
+    stop
+
+define bot refuse to respond
+  "Nah man..."

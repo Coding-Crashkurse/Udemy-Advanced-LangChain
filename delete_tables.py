@@ -34,3 +34,4 @@ class DatabaseCleaner:
 if __name__ == "__main__":
     cleaner = DatabaseCleaner("localhost", "5432", "vectordb", "admin", "admin")
     cleaner.drop_tables(["products", "langchain_pg_embedding"])
+89
