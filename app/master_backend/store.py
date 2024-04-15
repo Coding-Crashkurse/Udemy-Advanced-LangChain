@@ -12,6 +12,11 @@ from langchain_openai import OpenAIEmbeddings
 from langchain.retrievers import ParentDocumentRetriever
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+
+import os
+
+os.environ["OPENAI_API_KEY"] = "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"
+
 Base = declarative_base()
 
 
