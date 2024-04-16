@@ -15,6 +15,7 @@ nest_asyncio.apply()
 
 load_dotenv(find_dotenv())
 
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
