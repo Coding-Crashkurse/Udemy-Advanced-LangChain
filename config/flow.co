@@ -4,6 +4,9 @@ define flow self check input
   if not $allowed
     bot refuse to respond
     stop
+  else
+    $answer = execute return_answer
+    bot $answer
 
 define bot refuse to respond
   "Nah man..."
