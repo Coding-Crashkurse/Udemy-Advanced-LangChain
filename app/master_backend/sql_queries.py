@@ -1,6 +1,9 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.utilities.sql_database import SQLDatabase
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough, RunnableLambda
+from langchain_openai import ChatOpenAI
+import os
 
 template = """Based on the table schema below, write a SQL query that would answer the user's question:
 {schema}
@@ -10,23 +13,16 @@ SQL Query:"""
 prompt = ChatPromptTemplate.from_template(template)
 
 
-DATABASE_URL = "postgresql+psycopg2://admin:admin@localhost:5432/vectordb"
+db_user = os.getenv("DB_USER", "admin")
+db_password = os.getenv("DB_PASSWORD", "admin")
+db_host = os.getenv("DB_HOST", "127.0.0.1")
+db_port = os.getenv("DB_PORT", "5432")
+db_name = os.getenv("DB_NAME", "vectordb")
 
-db = SQLDatabase.from_uri(DATABASE_URL)
-
-
-def get_schema(_):
-    schema = db.get_table_info()
-    return schema
-
-
-def run_query(query):
-    return db.run(query)
-
-
-DATABASE_URL = "postgresql+psycopg2://admin:admin@localhost:5432/vectordb"
-
-db = SQLDatabase.from_uri(DATABASE_URL)
+CONNECTION_STRING = (
+    f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+)
+db = SQLDatabase.from_uri(CONNECTION_STRING)
 
 
 def get_schema(_):
@@ -38,8 +34,19 @@ def run_query(query):
     return db.run(query)
 
 
-from langchain_core.runnables import RunnablePassthrough
-from langchain_openai import ChatOpenAI
+def get_schema(_):
+    schema = db.get_table_info()
+    return schema
+
+
+def run_query(query):
+    return db.run(query)
+
+
+def print_sql(input):
+    print("SQL: ", input.content)
+    return input
+
 
 model = ChatOpenAI()
 
@@ -47,6 +54,7 @@ sql_response = (
     RunnablePassthrough.assign(schema=get_schema)
     | prompt
     | model.bind(stop=["\nSQLResult:"])
+    | RunnableLambda(print_sql)
     | StrOutputParser()
 )
 

@@ -26,10 +26,10 @@ services:
     env_file:
       - .env
 
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "3000:3000"
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
 
 volumes:
   redis_data:

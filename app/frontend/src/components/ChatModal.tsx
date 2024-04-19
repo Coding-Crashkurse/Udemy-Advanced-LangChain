@@ -10,7 +10,7 @@ import {
   Avatar,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import chefImage from "../assets/chef.jpg"; // Make sure the path is correct
+import chefImage from "../assets/chef.jpg"; // Ensure the path is correct
 
 import ChatMessage from "./ChatMessage";
 
@@ -31,13 +31,10 @@ const ChatModal: React.FC<ChatModalProps> = ({
 
   const handleCloseWithDelete = async () => {
     setIsLoading(true);
-    // Call the API to end the conversation
     try {
       const response = await fetch(
         `http://localhost:8000/end_conversation/${conversationId}`,
-        {
-          method: "DELETE",
-        }
+        { method: "DELETE" }
       );
       if (response.ok) {
         console.log("Conversation ended successfully.");
@@ -48,7 +45,7 @@ const ChatModal: React.FC<ChatModalProps> = ({
       console.error("Error:", error);
     }
     setIsLoading(false);
-    closeCallback(); // Close the modal
+    closeCallback();
   };
 
   const handleSend = async () => {
@@ -82,6 +79,9 @@ const ChatModal: React.FC<ChatModalProps> = ({
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
+    minHeight: 500,
+    display: "flex",
+    flexDirection: "column",
   };
 
   const headerStyle = {
@@ -96,9 +96,9 @@ const ChatModal: React.FC<ChatModalProps> = ({
     position: "absolute",
     top: 2,
     right: 2,
-    transition: "transform 0.3s ease-in-out", // Updated transition
+    transition: "transform 0.3s ease-in-out",
     "&:hover": {
-      transform: "rotate(180deg)", // Spin effect
+      transform: "rotate(180deg)",
       backgroundColor: "rgba(255, 255, 255, 0.3)",
     },
   };
@@ -110,14 +110,11 @@ const ChatModal: React.FC<ChatModalProps> = ({
       aria-labelledby="chat-modal"
       aria-describedby="chat-modal-for-sending-messages"
       BackdropProps={{
-        onClick: (event) => {
-          event.stopPropagation();
-        },
+        onClick: (event) => event.stopPropagation(),
       }}
     >
       <Box sx={modalStyle}>
         <Box sx={headerStyle}>
-          <p>ffsdf</p>
           <Avatar src={chefImage} sx={{ width: 100, height: 100, mb: 1 }} />
           <Typography variant="h6" component="h2">
             Chat with Chef Amico!
@@ -126,7 +123,7 @@ const ChatModal: React.FC<ChatModalProps> = ({
             <CloseIcon />
           </IconButton>
         </Box>
-        <Box sx={{ maxHeight: 300, overflow: "auto", mb: 2 }}>
+        <Box sx={{ maxHeight: 300, overflow: "auto", mb: 2, flexGrow: 1 }}>
           {chatHistory.map((msg, index) => (
             <ChatMessage
               key={index}
@@ -135,36 +132,45 @@ const ChatModal: React.FC<ChatModalProps> = ({
             />
           ))}
         </Box>
-        <TextField
-          label="Enter text..."
-          fullWidth
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          variant="outlined"
-          margin="normal"
-          disabled={isLoading}
-        />
-        {isLoading ? (
-          <CircularProgress
-            size={24}
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              marginTop: "-12px",
-              marginLeft: "-12px",
-            }}
+        <Box sx={{ mt: "auto" }}>
+          {" "}
+          {/* Input and Send button at the bottom */}
+          <TextField
+            label="Enter text..."
+            fullWidth
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            variant="outlined"
+            margin="normal"
+            disabled={isLoading}
           />
-        ) : (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSend}
-            style={{ backgroundColor: "darkblue", color: "white" }}
-          >
-            Send Request
-          </Button>
-        )}
+          {isLoading ? (
+            <CircularProgress
+              size={24}
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                marginTop: "-12px",
+                marginLeft: "-12px",
+              }}
+            />
+          ) : (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSend}
+              fullWidth
+              style={{
+                backgroundColor: "darkblue",
+                color: "white",
+                marginTop: 8,
+              }}
+            >
+              Send Request
+            </Button>
+          )}
+        </Box>
       </Box>
     </Modal>
   );

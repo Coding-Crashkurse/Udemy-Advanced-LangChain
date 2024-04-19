@@ -13,9 +13,6 @@ from langchain.retrievers import ParentDocumentRetriever
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
-import os
-
-
 Base = declarative_base()
 
 

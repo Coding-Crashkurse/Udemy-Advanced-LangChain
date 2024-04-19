@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ChatModal from "./components/ChatModal";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";

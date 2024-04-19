@@ -34,4 +34,4 @@ class DatabaseInspector:
 
 if __name__ == "__main__":
     inspector = DatabaseInspector("localhost", "5432", "vectordb", "admin", "admin")
-    inspector.print_row_counts(["langchain_pg_embedding"])
+    inspector.print_row_counts(["products", "langchain_pg_embedding"])

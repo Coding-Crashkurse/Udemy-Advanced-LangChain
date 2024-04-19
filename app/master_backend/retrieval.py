@@ -17,7 +17,7 @@ from langchain_core.runnables import RunnablePassthrough
 import logging
 from sentence_transformers import CrossEncoder
 from langchain_core.runnables import RunnableLambda, RunnableParallel
-from langchain_community.document_loaders import TextLoader
+from langchain_community.document_loaders.text import TextLoader
 
 
 db_user = os.getenv("DB_USER", "admin")
@@ -89,18 +89,7 @@ model_chain = prompt | model | StrOutputParser()
 rag_chain = RunnableParallel({"context": retriever, "question": RunnablePassthrough()})
 
 
-def debug_chain(input):
-    print("INPUT: ", input)
-    return input
-
-
-full_chain = (
-    rephrase_chain
-    | rag_chain
-    | RunnableLambda(debug_chain)
-    | rerank_chain
-    | model_chain
-)
+full_chain = rephrase_chain | rag_chain | rerank_chain | model_chain
 
 if __name__ == "__main__":
     print(

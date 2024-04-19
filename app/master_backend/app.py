@@ -6,9 +6,8 @@ import uuid
 import json
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import find_dotenv, load_dotenv
-from langchain_core.messages import AIMessage, HumanMessage
 import logging
-from custom_guardrails import final_chain
+from custom_guardrails import full_chain_with_classification
 import nest_asyncio
 
 nest_asyncio.apply()
@@ -18,12 +17,6 @@ load_dotenv(find_dotenv())
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-db_user = os.getenv("DB_USER", "user")
-db_password = os.getenv("DB_PASSWORD", "password")
-db_host = os.getenv("DB_HOST", "127.0.0.1")
-db_port = os.getenv("DB_PORT", "5432")
-db_name = os.getenv("DB_NAME", "restaurant")
 
 
 redis_client = redis.Redis(
@@ -62,7 +55,7 @@ async def conversation(conversation_id: str, question: Question):
     }
     logger.info(f"Conversation ID: {conversation_id}, Chain Input: {chain_input}")
 
-    response = final_chain.invoke(chain_input)
+    response = full_chain_with_classification.invoke(chain_input)
 
     chat_history.append({"role": "human", "content": question.question})
     chat_history.append({"role": "assistant", "content": response})
