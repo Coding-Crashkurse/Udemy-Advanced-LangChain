@@ -26,18 +26,3 @@ full_chain_with_classification = RunnableParallel(
         "chat_history": lambda x: x["chat_history"],
     }
 ) | RunnableLambda(route)
-
-
-if __name__ == "__main__":
-
-    print(
-        full_chain_with_classification.invoke(
-            {
-                "question": "Please list all food from the database",
-                "chat_history": [
-                    {"role": "user", "content": "What does the dog like to eat?"},
-                    {"role": "assistant", "content": "Thuna!"},
-                ],
-            }
-        )
-    )

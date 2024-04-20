@@ -1,7 +1,7 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.utilities.sql_database import SQLDatabase
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough, RunnableLambda
+from langchain_core.runnables import RunnablePassthrough
 from langchain_openai import ChatOpenAI
 import os
 
@@ -34,27 +34,12 @@ def run_query(query):
     return db.run(query)
 
 
-def get_schema(_):
-    schema = db.get_table_info()
-    return schema
-
-
-def run_query(query):
-    return db.run(query)
-
-
-def print_sql(input):
-    print("SQL: ", input.content)
-    return input
-
-
 model = ChatOpenAI()
 
 sql_response = (
     RunnablePassthrough.assign(schema=get_schema)
     | prompt
     | model.bind(stop=["\nSQLResult:"])
-    | RunnableLambda(print_sql)
     | StrOutputParser()
 )
 

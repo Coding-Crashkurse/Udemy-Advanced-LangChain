@@ -1,24 +1,12 @@
 from store import create_retriever
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 import os
-import redis
-import uuid
-import json
-from fastapi.middleware.cors import CORSMiddleware
-from dotenv import find_dotenv, load_dotenv
-from langchain_openai import OpenAIEmbeddings
-from langchain.vectorstores.pgvector import PGVector
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
-import logging
 from sentence_transformers import CrossEncoder
 from langchain_core.runnables import RunnableLambda, RunnableParallel
-from langchain_community.document_loaders.text import TextLoader
-
+from langchain.prompts.prompt import PromptTemplate
 
 db_user = os.getenv("DB_USER", "admin")
 db_password = os.getenv("DB_PASSWORD", "admin")
@@ -30,17 +18,6 @@ CONNECTION_STRING = (
     f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 )
 retriever = create_retriever(CONNECTION_STRING)
-
-loader1 = TextLoader("./data/food.txt")
-loader2 = TextLoader("./data/founder.txt")
-
-docs2 = loader1.load()
-docs1 = loader2.load()
-docs = docs1 + docs2
-
-retriever.add_documents(docs, ids=None)
-
-from langchain.prompts.prompt import PromptTemplate
 
 rephrase_template = """Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language.
 
@@ -88,18 +65,4 @@ model_chain = prompt | model | StrOutputParser()
 
 rag_chain = RunnableParallel({"context": retriever, "question": RunnablePassthrough()})
 
-
 full_chain = rephrase_chain | rag_chain | rerank_chain | model_chain
-
-if __name__ == "__main__":
-    print(
-        full_chain.invoke(
-            {
-                "question": "No, really?",
-                "chat_history": [
-                    HumanMessage(content="What does the dog like to eat?"),
-                    AIMessage(content="Thuna!"),
-                ],
-            }
-        )
-    )

@@ -6,9 +6,11 @@ import uuid
 import json
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import find_dotenv, load_dotenv
+from contextlib import asynccontextmanager
 import logging
 from custom_guardrails import full_chain_with_classification
 import nest_asyncio
+from data_init import DataIngestionManager
 
 nest_asyncio.apply()
 
@@ -31,7 +33,16 @@ class Question(BaseModel):
     question: str
 
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    data_manager = DataIngestionManager()
+    data_manager.ingest_vector_data(["./data/restaurant.txt", "./data/founder.txt"])
+    data_manager.ingest_tabular_data("./data/food.txt")
+    data_manager.query_products()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
