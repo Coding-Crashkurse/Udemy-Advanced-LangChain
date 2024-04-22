@@ -162,14 +162,16 @@ class RAGASEvaluator:
         self.result = evaluate(dataset=self.dataset, metrics=self.metrics)
         return self.result.to_pandas()
 
-    def print_evaluation(self, save_csv=True, sep=","):
+    def print_evaluation(
+        self, save_csv=True, sep=",", file_name="ragas_evaluation.csv"
+    ):
         if hasattr(self, "result"):
             df = self.result.to_pandas()
             print("RAGAS Evaluation Results:")
             print(df)
 
             if save_csv:
-                output_path = os.path.join(os.getcwd(), "ragas_evaluation.csv")
+                output_path = os.path.join(os.getcwd(), file_name)
                 df.to_csv(output_path, index=False, sep=sep)
                 print(f"Results saved to {output_path} with separator '{sep}'")
         else:

@@ -84,3 +84,9 @@ class DataIngestionManager:
         for product in products:
             print(product)
         self.close()
+
+
+if __name__ == "__main__":
+    data_manager = DataIngestionManager()
+    data_manager.ingest_vector_data(["./data/restaurant.txt", "./data/founder.txt"])
+    data_manager.ingest_tabular_data("./data/food.txt")

@@ -13,6 +13,9 @@ from langchain.retrievers import ParentDocumentRetriever
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
+import os
+
+
 Base = declarative_base()
 
 
@@ -133,11 +136,17 @@ def create_retriever(
         embedding_function=embeddings,
     )
 
-    text_splitter = RecursiveCharacterTextSplitter()
+    text_splitter_child = RecursiveCharacterTextSplitter(
+        chunk_size=150, chunk_overlap=20
+    )
+    text_splitter_parent = RecursiveCharacterTextSplitter(
+        chunk_size=400, chunk_overlap=20
+    )
     retriever = ParentDocumentRetriever(
         vectorstore=vectorstore,
         docstore=docstore,
-        child_splitter=text_splitter,
+        parent_splitter=text_splitter_parent,
+        child_splitter=text_splitter_child,
     )
 
     return retriever

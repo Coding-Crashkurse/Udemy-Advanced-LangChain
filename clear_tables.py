@@ -1,7 +1,7 @@
 import psycopg2
 
 
-class DatabaseInspector:
+class DatabaseCleaner:
     def __init__(self, host, port, dbname, user, password):
         self.conn_string = (
             f"host={host} port={port} dbname={dbname} user={user} password={password}"
@@ -23,7 +23,7 @@ class DatabaseInspector:
         self.connect()
         try:
             self.cursor.execute(
-                f"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = %s);",
+                "SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = %s);",
                 (table_name,),
             )
             exists = self.cursor.fetchone()[0]
@@ -31,16 +31,18 @@ class DatabaseInspector:
         finally:
             self.close()
 
-    def print_row_counts(self, table_names):
+    def clear_table_contents(self, table_names):
         for table_name in table_names:
             if self.table_exists(table_name):
                 self.connect()
                 try:
-                    self.cursor.execute(f"SELECT COUNT(*) FROM {table_name};")
-                    count = self.cursor.fetchone()[0]
-                    print(f"Table '{table_name}' has {count} rows.")
+                    self.cursor.execute(
+                        f"TRUNCATE TABLE {table_name} RESTART IDENTITY CASCADE;"
+                    )
+                    self.conn.commit()
+                    print(f"Table '{table_name}' has been cleared.")
                 except Exception as e:
-                    print(f"Error occurred while counting rows in '{table_name}': {e}")
+                    print(f"Error occurred while clearing '{table_name}': {e}")
                 finally:
                     self.close()
             else:
@@ -48,5 +50,5 @@ class DatabaseInspector:
 
 
 if __name__ == "__main__":
-    inspector = DatabaseInspector("localhost", "5432", "vectordb", "admin", "admin")
-    inspector.print_row_counts(["products", "langchain_pg_embedding", "docstore"])
+    cleaner = DatabaseCleaner("localhost", "5432", "vectordb", "admin", "admin")
+    cleaner.clear_table_contents(["products", "langchain_pg_embedding", "docstore"])

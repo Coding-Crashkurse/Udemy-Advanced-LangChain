@@ -30,8 +30,10 @@ text_splitter = RecursiveCharacterTextSplitter(
 chunks = text_splitter.split_documents(docs)
 
 
-template = """Answer the question based on the following context:
+template = """Answer the question based on the following context.
 {context}
+If you can´t answer the question based on the context, just say: "I am sorry, I am not allowed to answer about this topic."
+
 
 Question: {question}
 """
@@ -56,4 +58,6 @@ rag_chain = (
 evaluator = RAGASEvaluator(questions, ground_truth, rag_chain, retriever)
 evaluator.create_dataset()
 evaluation_results = evaluator.evaluate()
-evaluator.print_evaluation(save_csv=True, sep=";")
+evaluator.print_evaluation(
+    save_csv=True, sep=";", file_name="ragas_evaluation_basics.csv"
+)

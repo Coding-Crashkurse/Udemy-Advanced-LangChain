@@ -9,4 +9,4 @@ define flow self check input
 #    bot $answer
 
 define bot refuse to respond
-  "Nah man..."
+  "I am sorry, I am not allowed to answer about this topic."

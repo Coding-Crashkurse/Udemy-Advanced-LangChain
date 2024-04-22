@@ -1,4 +1,5 @@
 version: "3"
+
 services:
   redis:
     image: redis:latest
@@ -29,7 +30,20 @@ services:
   frontend:
     build: ./frontend
     ports:
+      - "5555:5555"
+
+  langfuse:
+    image: ghcr.io/langfuse/langfuse:latest
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://admin:admin@postgres:5432/vectordb
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: mysecret
+      SALT: mysalt
+    ports:
       - "3000:3000"
+    depends_on:
+      - postgres
 
 volumes:
   redis_data:

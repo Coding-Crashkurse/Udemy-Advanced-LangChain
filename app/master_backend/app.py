@@ -72,7 +72,6 @@ async def conversation(conversation_id: str, question: Question):
     chat_history.append({"role": "assistant", "content": response})
 
     redis_client.set(conversation_id, json.dumps(chat_history))
-    print(chat_history)
     return {"response": chat_history}
 
 

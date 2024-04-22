@@ -1,6 +1,8 @@
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
+from sqlalchemy import create_engine, inspect
+from tabulate import tabulate
 
 from pydantic import BaseModel, Field
 from sqlalchemy import Column, String, create_engine
@@ -13,9 +15,7 @@ from nemoguardrails.integrations.langchain.runnable_rails import RunnableRails
 from langchain_core.runnables import RunnableLambda, RunnableParallel
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.utilities.sql_database import SQLDatabase
-from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
-from langchain_openai import ChatOpenAI
 import os
 from langchain.schema import Document
 from langchain_core.stores import BaseStore
@@ -25,14 +25,7 @@ from langchain.retrievers import ParentDocumentRetriever
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from ragas_prep import RAGASEvaluator, questions, ground_truth
 from dotenv import load_dotenv
-import os
-import os
-from langchain_openai import ChatOpenAI
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnablePassthrough
 from sentence_transformers import CrossEncoder
-from langchain_core.runnables import RunnableLambda, RunnableParallel
 from langchain.prompts.prompt import PromptTemplate
 
 parent_dir = os.path.dirname(os.getcwd())
@@ -181,8 +174,8 @@ classification_template = PromptTemplate.from_template(
     """You are good at classifying a question.
     Given the user question below, classify it as either being about `Database`, `Chat` or 'Offtopic'.
 
-    <If the question is about products of the restaurant OR ordering food, drinks and anything related to the products of a restaurant, classify the question as 'Database'>
-    <If the question is about restaurant related topics like opening hours and similar topics, classify it as 'Chat'>
+    <If the question is about products of the restaurant like food, drinks and anything related to the products of a restaurant, classify the question as 'Database'>
+    <If the question is about restaurant related topics like opening hours, the history of the restaurant and similar topics, classify it as 'Chat'>
     <If the question is about whether, football or anything not related to the restaurant or
     products, classify the question as 'offtopic'>
 
@@ -196,7 +189,7 @@ classification_template = PromptTemplate.from_template(
 classification_chain = classification_template | ChatOpenAI() | StrOutputParser()
 
 
-CONNECTION_STRING = f"postgresql+psycopg2://admin:admin@127.0.0.1:5432/vectordb"
+CONNECTION_STRING = "postgresql+psycopg2://admin:admin@127.0.0.1:5432/vectordb"
 retriever = create_retriever(CONNECTION_STRING)
 
 rephrase_template = """Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language.
@@ -206,13 +199,6 @@ Chat History:
 Follow Up Input: {question}
 Standalone question:"""
 REPHRASE_TEMPLATE = PromptTemplate.from_template(rephrase_template)
-
-template = """Answer the question based only on the following context:
-{context}
-
-Question: {question}
-"""
-ANSWER_PROMPT = ChatPromptTemplate.from_template(template)
 
 rephrase_chain = REPHRASE_TEMPLATE | ChatOpenAI(temperature=0) | StrOutputParser()
 
@@ -234,6 +220,7 @@ def rerank_documents(input_data):
 
 template = """Answer the question based only on the following context:
 {context}
+If you can´t answer the question with the context, just answer: "I am sorry, I am not allowed to answer about this topic."
 
 Question: {question}
 """
@@ -256,13 +243,34 @@ SQL Query:"""
 prompt = ChatPromptTemplate.from_template(template)
 
 
-CONNECTION_STRING = f"postgresql+psycopg2://admin:admin@127.0.0.1:5432/vectordb"
+CONNECTION_STRING = "postgresql+psycopg2://admin:admin@127.0.0.1:5432/vectordb"
 db = SQLDatabase.from_uri(CONNECTION_STRING)
 
 
+from sqlalchemy import create_engine, inspect
+from tabulate import tabulate
+
+
 def get_schema(_):
-    schema = db.get_table_info()
-    return schema
+    engine = create_engine(CONNECTION_STRING)
+
+    inspector = inspect(engine)
+    columns = inspector.get_columns("products")
+
+    column_data = [
+        {
+            "Column Name": col["name"],
+            "Data Type": str(col["type"]),
+            "Nullable": "Yes" if col["nullable"] else "No",
+            "Default": col["default"] if col["default"] else "None",
+            "Autoincrement": "Yes" if col["autoincrement"] else "No",
+        }
+        for col in columns
+    ]
+    schema_output = tabulate(column_data, headers="keys", tablefmt="grid")
+    formatted_schema = f"Schema for 'PRODUCTS' table:\n{schema_output}"
+
+    return formatted_schema
 
 
 def run_query(query):
@@ -328,4 +336,6 @@ evaluator = RAGASEvaluator(
 
 evaluator.create_dataset()
 evaluation_results = evaluator.evaluate()
-evaluator.print_evaluation(save_csv=True, sep=";")
+evaluator.print_evaluation(
+    save_csv=True, sep=";", file_name="ragas_evaluation_advanced.csv"
+)

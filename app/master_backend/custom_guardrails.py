@@ -14,7 +14,7 @@ def route(info):
     if "database" in info["topic"].lower():
         return sql_chain
     elif "chat" in info["topic"].lower():
-        return guardrails | full_chain
+        return full_chain
     else:
         return "I am sorry, I am not allowed to answer about this topic."
 
@@ -26,3 +26,14 @@ full_chain_with_classification = RunnableParallel(
         "chat_history": lambda x: x["chat_history"],
     }
 ) | RunnableLambda(route)
+
+if __name__ == "__main__":
+
+    print(
+        full_chain_with_classification.invoke(
+            {
+                "question": "What makes Chef Amico's restaurant more than a mere eatery?",
+                "chat_history": [],
+            }
+        )
+    )
