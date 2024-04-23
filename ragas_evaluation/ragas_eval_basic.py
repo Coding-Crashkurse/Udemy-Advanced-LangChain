@@ -59,5 +59,5 @@ evaluator = RAGASEvaluator(questions, ground_truth, rag_chain, retriever)
 evaluator.create_dataset()
 evaluation_results = evaluator.evaluate()
 evaluator.print_evaluation(
-    save_csv=True, sep=";", file_name="ragas_evaluation_basics.csv"
+    save_csv=True, sep=";", decimal=",", file_name="ragas_evaluation_basics.csv"
 )

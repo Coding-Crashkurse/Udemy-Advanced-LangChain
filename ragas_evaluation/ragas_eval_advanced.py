@@ -337,5 +337,5 @@ evaluator = RAGASEvaluator(
 evaluator.create_dataset()
 evaluation_results = evaluator.evaluate()
 evaluator.print_evaluation(
-    save_csv=True, sep=";", file_name="ragas_evaluation_advanced.csv"
+    save_csv=True, sep=";", decimal=",", file_name="ragas_evaluation_basics.csv"
 )

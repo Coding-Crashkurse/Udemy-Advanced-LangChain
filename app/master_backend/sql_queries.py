@@ -4,6 +4,9 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_openai import ChatOpenAI
 import os
+from sqlalchemy import create_engine, inspect
+from tabulate import tabulate
+
 
 template = """Based on the table schema below, write a SQL query that would answer the user's question:
 {schema}
@@ -26,8 +29,25 @@ db = SQLDatabase.from_uri(CONNECTION_STRING)
 
 
 def get_schema(_):
-    schema = db.get_table_info()
-    return schema
+    engine = create_engine(CONNECTION_STRING)
+
+    inspector = inspect(engine)
+    columns = inspector.get_columns("products")
+
+    column_data = [
+        {
+            "Column Name": col["name"],
+            "Data Type": str(col["type"]),
+            "Nullable": "Yes" if col["nullable"] else "No",
+            "Default": col["default"] if col["default"] else "None",
+            "Autoincrement": "Yes" if col["autoincrement"] else "No",
+        }
+        for col in columns
+    ]
+    schema_output = tabulate(column_data, headers="keys", tablefmt="grid")
+    formatted_schema = f"Schema for 'PRODUCTS' table:\n{schema_output}"
+
+    return formatted_schema
 
 
 def run_query(query):
