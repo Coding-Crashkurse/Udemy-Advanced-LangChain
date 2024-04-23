@@ -11,6 +11,10 @@ import logging
 from custom_guardrails import full_chain_with_classification
 import nest_asyncio
 from data_init import DataIngestionManager
+from langfuse.callback import CallbackHandler
+
+langfuse_handler = CallbackHandler()
+langfuse_handler.auth_check()
 
 nest_asyncio.apply()
 
@@ -66,7 +70,9 @@ async def conversation(conversation_id: str, question: Question):
     }
     logger.info(f"Conversation ID: {conversation_id}, Chain Input: {chain_input}")
 
-    response = full_chain_with_classification.invoke(chain_input)
+    response = full_chain_with_classification.invoke(
+        chain_input, config={"callbacks": [langfuse_handler]}
+    )
 
     chat_history.append({"role": "human", "content": question.question})
     chat_history.append({"role": "assistant", "content": response})
