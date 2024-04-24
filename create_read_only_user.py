@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2 import sql
 
 
 class DatabaseUserCreator:
@@ -23,26 +24,69 @@ class DatabaseUserCreator:
         self.connect()
         try:
             self.cursor.execute(
-                f"CREATE USER {new_user} WITH PASSWORD %s;", (new_user_password,)
+                sql.SQL("CREATE USER {} WITH PASSWORD %s").format(
+                    sql.Identifier(new_user)
+                ),
+                [new_user_password],
             )
             self.cursor.execute(
-                f"GRANT CONNECT ON DATABASE {self.conn.info.dbname} TO {new_user};"
+                sql.SQL("GRANT CONNECT ON DATABASE {} TO {}").format(
+                    sql.Identifier(self.conn.info.dbname),
+                    sql.Identifier(new_user),
+                )
             )
             self.cursor.execute(
-                f"GRANT SELECT ON ALL TABLES IN SCHEMA public TO {new_user};"
+                sql.SQL(
+                    "GRANT SELECT ON ALL TABLES IN SCHEMA public TO readonlyuser"
+                ).format(sql.Identifier(new_user))
             )
             self.cursor.execute(
-                f"ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT TO {new_user};"
+                sql.SQL(
+                    "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT TO readonlyuser"
+                ).format(sql.Identifier(new_user))
             )
             self.conn.commit()
-            print(f"Read-only user '{new_user}' created successfully.")
+            print(f"Read-only user {new_user} created successfully.")
         except Exception as e:
             self.conn.rollback()
             print(f"Error creating read-only user: {e}")
         finally:
             self.close()
 
+    def list_users(self):
+        self.connect()
+        try:
+            self.cursor.execute(sql.SQL("SELECT usename FROM pg_user"))
+            users = self.cursor.fetchall()
+            return users
+        finally:
+            self.close()
 
+    def list_roles(self):
+        self.connect()
+        try:
+            self.cursor.execute(
+                sql.SQL(
+                    "SELECT rolname AS role_name, rolsuper AS is_superuser FROM pg_roles"
+                )
+            )
+            roles = self.cursor.fetchall()
+            return roles
+        finally:
+            self.close()
+
+
+# Example usage with list_users and list_roles methods
 if __name__ == "__main__":
     creator = DatabaseUserCreator("localhost", "5432", "vectordb", "admin", "admin")
-    creator.create_read_only_user("readonly_user", "readonly_password")
+
+    # Create a read-only user
+    creator.create_read_only_user("readonlyuser", "readonlypassword")
+
+    # List all users
+    users = creator.list_users()
+    print("Users:", users)
+
+    # List all roles
+roles = creator.list_roles()
+print("Roles:", roles)
