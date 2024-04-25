@@ -36,13 +36,13 @@ class DatabaseUserCreator:
                 )
             )
             self.cursor.execute(
-                sql.SQL(
-                    "GRANT SELECT ON ALL TABLES IN SCHEMA public TO readonlyuser"
-                ).format(sql.Identifier(new_user))
+                sql.SQL("GRANT SELECT ON ALL TABLES IN SCHEMA public TO {}").format(
+                    sql.Identifier(new_user)
+                )
             )
             self.cursor.execute(
                 sql.SQL(
-                    "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT TO readonlyuser"
+                    "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO {}"
                 ).format(sql.Identifier(new_user))
             )
             self.conn.commit()
@@ -76,17 +76,13 @@ class DatabaseUserCreator:
             self.close()
 
 
-# Example usage with list_users and list_roles methods
 if __name__ == "__main__":
     creator = DatabaseUserCreator("localhost", "5432", "vectordb", "admin", "admin")
 
-    # Create a read-only user
     creator.create_read_only_user("readonlyuser", "readonlypassword")
 
-    # List all users
     users = creator.list_users()
     print("Users:", users)
 
-    # List all roles
-roles = creator.list_roles()
-print("Roles:", roles)
+    roles = creator.list_roles()
+    print("Roles:", roles)
