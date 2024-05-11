@@ -8,7 +8,8 @@ Welcome to the course on **Advanced RAG with Langchain**. This repository contai
 
 Below is a list of Jupyter notebooks included in this course:
 
-- `01_LangChain_Expression_Language.ipynb`: Introduction to LangChain's expression language.
+- `00_LCEL_Deepdive.ipynb`: Intro to LangChain Expression Language with custom LCEL which explains the pipe operator.
+- `01_LangChain_Expression_Language.ipynb`: Introduction to LangChain's expression language with real world examples.
 - `02_LCEL_ChatWithHistory.ipynb`: Implementing chat with history in LangChain.
 - `03_IndexingAPI.ipynb`: Exploring LangChain's indexing API.
 - `04_Ragas.ipynb`: An introduction to RAG pipelines.
