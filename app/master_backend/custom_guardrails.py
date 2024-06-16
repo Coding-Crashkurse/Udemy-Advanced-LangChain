@@ -1,10 +1,9 @@
-from retrieval import full_chain
+from classification import classification_chain
+from langchain_core.runnables import RunnableLambda, RunnableParallel
 from nemoguardrails import RailsConfig
 from nemoguardrails.integrations.langchain.runnable_rails import RunnableRails
-from langchain_core.runnables import RunnableLambda, RunnableParallel
-from classification import classification_chain
+from retrieval import full_chain
 from sql_queries import sql_chain
-
 
 config = RailsConfig.from_path("./config")
 guardrails = RunnableRails(config, input_key="question")

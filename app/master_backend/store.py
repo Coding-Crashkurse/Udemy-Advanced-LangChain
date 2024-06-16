@@ -1,16 +1,16 @@
+import logging
+from typing import Generic, Iterator, Optional, Sequence, TypeVar
+
+from langchain.retrievers import ParentDocumentRetriever
+from langchain.schema import Document
+from langchain_community.vectorstores.pgvector import PGVector
+from langchain_core.stores import BaseStore
+from langchain_openai import OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from pydantic import BaseModel, Field
 from sqlalchemy import Column, String, create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker, scoped_session
 from sqlalchemy.dialects.postgresql import JSONB
-from typing import Optional, Generic, Sequence, TypeVar, Iterator
-import logging
-
-from langchain.schema import Document
-from langchain_core.stores import BaseStore
-from langchain_community.vectorstores.pgvector import PGVector
-from langchain_openai import OpenAIEmbeddings
-from langchain.retrievers import ParentDocumentRetriever
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from sqlalchemy.orm import declarative_base, scoped_session, sessionmaker
 
 Base = declarative_base()
 

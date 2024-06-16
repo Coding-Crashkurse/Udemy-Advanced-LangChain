@@ -2,7 +2,6 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 
-
 classification_template = PromptTemplate.from_template(
     """You are good at classifying a question.
     Given the user question below, classify it as either being about `Database`, `Chat` or 'Offtopic'.

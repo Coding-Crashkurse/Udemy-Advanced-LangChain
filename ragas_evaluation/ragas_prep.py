@@ -1,15 +1,10 @@
+import os
+
 from datasets import Dataset
 from ragas import evaluate
-from ragas.metrics import (
-    faithfulness,
-    answer_relevancy,
-    context_relevancy,
-    context_recall,
-    context_precision,
-)
-import os
+from ragas.metrics import (answer_relevancy, context_precision, context_recall,
+                           context_relevancy, faithfulness)
 from tqdm import tqdm
-
 
 questions = [
     "Where is Chef Amico's restaurant located?",

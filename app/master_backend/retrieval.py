@@ -1,12 +1,13 @@
-from store import create_retriever
 import os
-from langchain_openai import ChatOpenAI
+
+from langchain.prompts.prompt import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnablePassthrough
+from langchain_core.runnables import (RunnableLambda, RunnableParallel,
+                                      RunnablePassthrough)
+from langchain_openai import ChatOpenAI
 from sentence_transformers import CrossEncoder
-from langchain_core.runnables import RunnableLambda, RunnableParallel
-from langchain.prompts.prompt import PromptTemplate
+from store import create_retriever
 
 db_user = os.getenv("DB_USER", "admin")
 db_password = os.getenv("DB_PASSWORD", "admin")

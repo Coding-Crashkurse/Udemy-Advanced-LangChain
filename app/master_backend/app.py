@@ -1,17 +1,18 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-import os
-import redis
-import uuid
 import json
-from fastapi.middleware.cors import CORSMiddleware
-from dotenv import find_dotenv, load_dotenv
-from contextlib import asynccontextmanager
 import logging
-from custom_guardrails import full_chain_with_classification
+import os
+import uuid
+from contextlib import asynccontextmanager
+
 import nest_asyncio
+import redis
+from custom_guardrails import full_chain_with_classification
 from data_init import DataIngestionManager
+from dotenv import find_dotenv, load_dotenv
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from langfuse.callback import CallbackHandler
+from pydantic import BaseModel
 
 langfuse_handler = CallbackHandler()
 langfuse_handler.auth_check()

@@ -1,8 +1,9 @@
+import decimal
 import os
+
 import psycopg2
 from langchain_community.document_loaders.text import TextLoader
 from store import create_retriever
-import decimal
 
 
 class DataIngestionManager:

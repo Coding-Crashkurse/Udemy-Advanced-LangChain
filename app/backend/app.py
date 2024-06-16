@@ -1,19 +1,19 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-import os
-import redis
-import uuid
 import json
-from fastapi.middleware.cors import CORSMiddleware
+import logging
+import os
+import uuid
+
+import redis
 from dotenv import find_dotenv, load_dotenv
-from langchain_openai import OpenAIEmbeddings
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from langchain.vectorstores.pgvector import PGVector
-from langchain_openai import ChatOpenAI
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
-import logging
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from pydantic import BaseModel
 
 load_dotenv(find_dotenv())
 

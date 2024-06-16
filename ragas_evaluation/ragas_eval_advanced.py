@@ -1,32 +1,29 @@
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import PromptTemplate
-from langchain_openai import ChatOpenAI
-from sqlalchemy import create_engine, inspect
-from tabulate import tabulate
-
-from pydantic import BaseModel, Field
-from sqlalchemy import Column, String, create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker, scoped_session
-from sqlalchemy.dialects.postgresql import JSONB
-from typing import Optional, Generic, Sequence, TypeVar, Iterator
 import logging
+import os
+from typing import Generic, Iterator, Optional, Sequence, TypeVar
+
+from dotenv import load_dotenv
+from langchain.prompts.prompt import PromptTemplate
+from langchain.retrievers import ParentDocumentRetriever
+from langchain.schema import Document
+from langchain_community.utilities.sql_database import SQLDatabase
+from langchain_community.vectorstores.pgvector import PGVector
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
+from langchain_core.runnables import (RunnableLambda, RunnableParallel,
+                                      RunnablePassthrough)
+from langchain_core.stores import BaseStore
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from nemoguardrails import RailsConfig
 from nemoguardrails.integrations.langchain.runnable_rails import RunnableRails
-from langchain_core.runnables import RunnableLambda, RunnableParallel
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_community.utilities.sql_database import SQLDatabase
-from langchain_core.runnables import RunnablePassthrough
-import os
-from langchain.schema import Document
-from langchain_core.stores import BaseStore
-from langchain_community.vectorstores.pgvector import PGVector
-from langchain_openai import OpenAIEmbeddings
-from langchain.retrievers import ParentDocumentRetriever
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from ragas_prep import RAGASEvaluator, questions, ground_truth
-from dotenv import load_dotenv
+from pydantic import BaseModel, Field
+from ragas_prep import RAGASEvaluator, ground_truth, questions
 from sentence_transformers import CrossEncoder
-from langchain.prompts.prompt import PromptTemplate
+from sqlalchemy import Column, String, create_engine, inspect
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm import declarative_base, scoped_session, sessionmaker
+from tabulate import tabulate
 
 parent_dir = os.path.dirname(os.getcwd())
 app_dir = os.path.join(parent_dir, "app")

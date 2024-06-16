@@ -1,12 +1,12 @@
-from langchain_core.prompts import ChatPromptTemplate
+import os
+
 from langchain_community.utilities.sql_database import SQLDatabase
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_openai import ChatOpenAI
-import os
 from sqlalchemy import create_engine, inspect
 from tabulate import tabulate
-
 
 template = """Based on the table schema below, write a SQL query that would answer the user's question:
 {schema}
