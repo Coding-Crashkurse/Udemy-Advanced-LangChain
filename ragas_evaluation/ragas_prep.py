@@ -2,8 +2,13 @@ import os
 
 from datasets import Dataset
 from ragas import evaluate
-from ragas.metrics import (answer_relevancy, context_precision, context_recall,
-                           context_relevancy, faithfulness)
+from ragas.metrics import (
+    answer_relevancy,
+    context_precision,
+    context_recall,
+    context_relevancy,
+    faithfulness,
+)
 from tqdm import tqdm
 
 questions = [

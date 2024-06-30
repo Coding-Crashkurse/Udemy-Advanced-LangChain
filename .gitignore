@@ -4,3 +4,4 @@ app/.cache
 __pycache__/
 *.pyc
 .cache/
+notes
