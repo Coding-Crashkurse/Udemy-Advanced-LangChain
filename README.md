@@ -17,14 +17,14 @@ Below is a list of Jupyter notebooks included in this course:
 - `06_BetterEmbeddings.ipynb`: Best practices for creating embeddings.
 - `07_BetterQueries.ipynb`: Improving query formulation in RAG.
 - `08_BetterRetriever.ipynb`: Techniques for enhancing retriever performance.
-- `08_RerankingCrossEncoder.ipynb`: Using a cross-encoder for re-ranking.
-- `09_RAG_with_Agents.ipynb`: Basics of routing in LangChain using agents.
-- `10_Routing.ipynb`: Routing with database queries.
-- `11_RoutingAndDBQueries.ipynb`: Advanced routing with database queries.
-- `12_ToolCalling.ipynb`: Implementing external tool calling in LangChain.
-- `13_NemoGuardRails.ipynb`: Implementing guardrails with NeMo.
-- `14_GuardrailswithHistory.ipynb`: Using guardrails with chat history.
-- `15_Langfuse.ipynb`: An introduction to Langfuse integration with LangChain.
+- `09_RerankingCrossEncoder.ipynb`: Using a cross-encoder for re-ranking.
+- `10_RAG_with_Agents.ipynb`: Basics of routing in LangChain using agents.
+- `11_Routing.ipynb`: Routing with database queries.
+- `12_RoutingAndDBQueries.ipynb`: Advanced routing with database queries.
+- `13_ToolCalling.ipynb`: Implementing external tool calling in LangChain.
+- `14_NemoGuardRails.ipynb`: Implementing guardrails with NeMo.
+- `15_GuardrailswithHistory.ipynb`: Using guardrails with chat history.
+- `16_Langfuse.ipynb`: An introduction to Langfuse integration with LangChain.
 
 ### Helper Scripts
 
