@@ -10,3 +10,4 @@ python-dotenv
 postgres
 psycopg2-binary
 pgvector
+langchain-community

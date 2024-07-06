@@ -13,3 +13,4 @@ pgvector
 nemoguardrails[openai]==0.8.2
 sentence_transformers
 langfuse
+tabulate

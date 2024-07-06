@@ -4,7 +4,6 @@ import os
 import uuid
 from contextlib import asynccontextmanager
 
-import nest_asyncio
 import redis
 from custom_guardrails import full_chain_with_classification
 from data_init import DataIngestionManager
@@ -14,12 +13,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from langfuse.callback import CallbackHandler
 from pydantic import BaseModel
 
+load_dotenv(find_dotenv())
+
 langfuse_handler = CallbackHandler()
 langfuse_handler.auth_check()
-
-nest_asyncio.apply()
-
-load_dotenv(find_dotenv())
 
 
 logging.basicConfig(level=logging.INFO)
