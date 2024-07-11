@@ -60,4 +60,10 @@ This course repository is licensed under a restricted license. You are allowed t
 
 ## How to Use
 
-1. Clone this repository to
+1. Clone this repository to your local machine.
+2. Open the Jupyter notebooks in your preferred environment and follow along with the course.
+3. Use the helper scripts to manage data and database tables.
+4. Start the full-stack app with Docker from the `app` folder.
+5. Experiment with the RAG pipelines in the notebooks to understand their evaluation process.
+
+Happy learning!
