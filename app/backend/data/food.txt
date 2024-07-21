@@ -1,0 +1,50 @@
+Margherita Pizza; $12; Classic with tomato, mozzarella, and basil; Main Dish
+Spaghetti Carbonara; $15; Creamy pasta with pancetta and parmesan; Main Dish
+Bruschetta; $8; Toasted bread with tomato, garlic, and olive oil; Appetizer
+Caprese Salad; $10; Fresh tomatoes, mozzarella, and basil; Salad
+Lasagna; $14; Layered pasta with meat sauce and cheese; Main Dish
+Tiramisu; $9; Coffee-flavored Italian dessert; Dessert
+Gelato; $7; Traditional Italian ice cream; Dessert
+Risotto Milanese; $16; Creamy saffron-infused rice dish; Main Dish
+Polenta; $11; Cornmeal dish, often served as a side; Side Dish
+Osso Buco; $20; Braised veal shanks with vegetables and broth; Main Dish
+Ravioli; $13; Stuffed pasta with cheese or meat filling; Main Dish
+Minestrone Soup; $9; Vegetable soup with pasta or rice; Soup
+Prosecco; $8; Italian sparkling white wine; Drink
+Chianti; $10; Dry red wine from Tuscany; Drink
+Focaccia; $6; Oven-baked Italian bread; Side Dish
+Calamari; $12; Fried squid rings with marinara sauce; Appetizer
+Espresso; $4; Strong Italian coffee; Drink
+Cannoli; $8; Sicilian pastry with sweet ricotta filling; Dessert
+Arancini; $10; Fried rice balls stuffed with cheese or meat; Appetizer
+Panna Cotta; $9; Creamy Italian dessert with caramel or fruit; Dessert
+Negroni; $12; Cocktail with gin, vermouth, and Campari; Drink
+Aperol Spritz; $10; Aperitif cocktail with Aperol, prosecco, and soda; Drink
+Gnocchi; $14; Potato-based pasta served with various sauces; Main Dish
+Panzanella; $9; Bread and tomato salad; Salad
+Carpaccio; $15; Thinly sliced raw beef with arugula and parmesan; Appetizer
+Affogato; $7; Espresso poured over gelato; Dessert
+Biscotti; $5; Crunchy Italian almond biscuits; Dessert
+Vitello Tonnato; $18; Thin slices of veal with a creamy tuna sauce; Main Dish
+Crostini; $7; Small toasted bread with toppings; Appetizer
+Zabaglione; $10; Light custard dessert made with egg yolks; Dessert
+Frittata; $12; Italian-style omelette; Main Dish
+Saltimbocca; $19; Veal wrapped in prosciutto and sage; Main Dish
+Limoncello; $8; Italian lemon liqueur; Drink
+Grappa; $9; Italian grape-based brandy; Drink
+Sangiovese; $11; Medium-bodied red wine; Drink
+Ribollita; $10; Tuscan bread and vegetable soup; Soup
+Tortellini; $14; Ring-shaped pasta filled with meat or cheese; Main Dish
+Panettone; $15; Traditional Italian Christmas bread; Dessert
+Insalata Mista; $8; Mixed green salad with Italian dressing; Salad
+Cacio e Pepe; $13; Pasta with cheese and pepper; Main Dish
+Italian Soda; $5; Carbonated water with flavored syrup; Drink
+Americano; $6; Coffee with added hot water; Drink
+Frutti di Mare; $22; Seafood pasta with mixed shellfish; Main Dish
+Caponata; $9; Eggplant dish with capers, olives, and celery; Side Dish
+Amaretto Sour; $10; Cocktail with amaretto, lemon juice, and sugar; Drink
+Branzino; $21; Mediterranean sea bass, usually grilled or baked; Main Dish
+Porchetta; $18; Savory, fatty, and moist boneless pork roast; Main Dish
+Montepulciano Wine; $12; Full-bodied red wine; Drink
+Bresaola; $14; Air-dried, salted beef served as an appetizer; Appetizer
+Pesto Pasta; $12; Pasta with traditional basil pesto sauce; Main Dish

@@ -11,3 +11,5 @@ postgres
 psycopg2-binary
 pgvector
 langchain-community
+unstructured
+libmagic

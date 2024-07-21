@@ -13,6 +13,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from contextlib import asynccontextmanager
 from pydantic import BaseModel
 
 load_dotenv(find_dotenv())
@@ -42,6 +43,7 @@ store = PGVector(
     connection_string=CONNECTION_STRING,
     embedding_function=embeddings,
 )
+
 retriever = store.as_retriever()
 
 from langchain.prompts.prompt import PromptTemplate
@@ -79,7 +81,28 @@ redis_client = redis.Redis(
     password=os.getenv("REDIS_PASSWORD", None),
 )
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    from langchain_community.document_loaders import DirectoryLoader
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+    loader = DirectoryLoader("./data", glob="**/*.txt")
+    docs = loader.load()
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=200,
+        chunk_overlap=20,
+        length_function=len,
+        is_separator_regex=False,
+        # separators=[\n\n", "\n", " ", ""]
+    )
+    chunks = text_splitter.split_documents(docs)
+    store.add_documents(chunks)
+    yield
+    store.delete_collection()
+
+
+app = FastAPI(lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -118,7 +141,7 @@ async def conversation(conversation_id: str, question: Question):
     chat_history.append({"role": "assistant", "content": response})
 
     redis_client.set(conversation_id, json.dumps(chat_history))
-    print(chat_history)
+    logger.info(chat_history)
     return {"response": chat_history}
 
 
