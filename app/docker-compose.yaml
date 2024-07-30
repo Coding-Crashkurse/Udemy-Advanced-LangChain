@@ -20,7 +20,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   backend:
-    build: ./backend
+    build: ./master_backend
     ports:
       - "8000:8000"
     depends_on:
@@ -30,7 +30,7 @@ services:
       - .env
     environment:
       LANGFUSE_HOST: http://langfuse:3000
-      OPENAI_MODEL: "gpt-4o"
+      OPENAI_MODEL: "gpt-4o-mini"
 
   frontend:
     build: ./frontend

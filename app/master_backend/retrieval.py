@@ -62,7 +62,7 @@ template = """Answer the question based only on the following context:
 Question: {question}
 """
 prompt = ChatPromptTemplate.from_template(template)
-model = ChatOpenAI(os.getenv("OPENAI_MODEL", "gpt-4o-mini"))
+model = ChatOpenAI(model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"), max_retries=5)
 
 rerank_chain = RunnablePassthrough.assign(context=RunnableLambda(rerank_documents))
 model_chain = prompt | model | StrOutputParser()

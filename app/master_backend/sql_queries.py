@@ -7,12 +7,30 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_openai import ChatOpenAI
 from sqlalchemy import create_engine, inspect
 from tabulate import tabulate
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 template = """Based on the table schema below, write a SQL query that would answer the user's question:
 {schema}
 
+Important: ONLY provide the query, nothing else:
+
+Example:
+Table Name: Customers
+Columns:
+- id (int)
+- name (varchar)
+- email (varchar)
+- created_at (date)
+
+Question: Show me all customer email addresses.
+SELECT email FROM Customers;
+
 Question: {question}
 SQL Query:"""
+
 prompt = ChatPromptTemplate.from_template(template)
 
 
@@ -51,10 +69,11 @@ def get_schema(_):
 
 
 def run_query(query):
+    logger.info("QUERY: ", query)
     return db.run(query)
 
 
-model = ChatOpenAI()
+model = ChatOpenAI(model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"), max_retries=5)
 
 sql_response = (
     RunnablePassthrough.assign(schema=get_schema)
@@ -64,7 +83,7 @@ sql_response = (
 )
 
 
-template = """Based on the table schema below, question, sql query, and sql response, write a natural language response:
+template = """Based on the table schema below, question, sql query, and sql response, write a natural language response, dont include anything that could give away the information that you retrieved the information from a database :
 {schema}
 
 Question: {question}
