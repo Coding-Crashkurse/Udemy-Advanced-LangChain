@@ -30,6 +30,7 @@ services:
       - .env
     environment:
       LANGFUSE_HOST: http://langfuse:3000
+      OPENAI_MODEL: "gpt-4o"
 
   frontend:
     build: ./frontend

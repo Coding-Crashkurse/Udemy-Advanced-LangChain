@@ -3,8 +3,11 @@ import os
 from langchain.prompts.prompt import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import (RunnableLambda, RunnableParallel,
-                                      RunnablePassthrough)
+from langchain_core.runnables import (
+    RunnableLambda,
+    RunnableParallel,
+    RunnablePassthrough,
+)
 from langchain_openai import ChatOpenAI
 from sentence_transformers import CrossEncoder
 from store import create_retriever
@@ -59,7 +62,7 @@ template = """Answer the question based only on the following context:
 Question: {question}
 """
 prompt = ChatPromptTemplate.from_template(template)
-model = ChatOpenAI()
+model = ChatOpenAI(os.getenv("OPENAI_MODEL", "gpt-4o-mini"))
 
 rerank_chain = RunnablePassthrough.assign(context=RunnableLambda(rerank_documents))
 model_chain = prompt | model | StrOutputParser()
