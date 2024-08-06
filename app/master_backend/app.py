@@ -13,10 +13,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from langfuse.callback import CallbackHandler
 from pydantic import BaseModel
 
+logger = logging.getLogger(__name__)
+
 load_dotenv(find_dotenv())
 
 langfuse_handler = CallbackHandler()
-langfuse_handler.auth_check()
+callback_initialized = False
+try:
+    langfuse_handler.auth_check()
+    logger.info("Authenticated with langfuse_handler successfully.")
+    callback_initialized = True
+except Exception as e:
+    logger.error(
+        "Failed to authenticate with langfuse_handler. Running without callback."
+    )
+    callback_initialized = False
 
 
 logging.basicConfig(level=logging.INFO)
@@ -68,9 +79,12 @@ async def conversation(conversation_id: str, question: Question):
     }
     logger.info(f"Conversation ID: {conversation_id}, Chain Input: {chain_input}")
 
-    response = full_chain_with_classification.invoke(
-        chain_input, config={"callbacks": [langfuse_handler]}
-    )
+    if callback_initialized:
+        response = full_chain_with_classification.invoke(
+            chain_input, config={"callbacks": [langfuse_handler]}
+        )
+    else:
+        response = full_chain_with_classification.invoke(chain_input)
 
     chat_history.append({"role": "human", "content": question.question})
     chat_history.append({"role": "assistant", "content": response})
