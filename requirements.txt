@@ -179,9 +179,6 @@ tenacity==8.4.2
 threadpoolctl==3.5.0
 tiktoken==0.7.0
 tokenizers==0.19.1
-torch==2.3.1+cpu
-torchaudio==2.3.1+cpu
-torchvision==0.18.1+cpu
 tornado==6.4.1
 tqdm==4.66.4
 traitlets==5.14.3
@@ -206,7 +203,26 @@ xxhash==3.4.1
 yarl==1.9.4
 zipp==3.19.2
 
+
 # Windows-specific dependencies
 intel-openmp==2021.4.0; sys_platform == 'win32'
 mkl==2021.4.0; sys_platform == 'win32'
 tbb==2021.11.0; sys_platform == 'win32'
+
+-f https://download.pytorch.org/whl/torch_stable.html
+torch==2.3.1+cpu; sys_platform == 'win32'
+torchaudio==2.3.1+cpu; sys_platform == 'win32'
+torchvision==0.18.1+cpu; sys_platform == 'win32'
+
+
+# MacOS (Apple Silicon) specific dependencies
+-f https://download.pytorch.org/whl/torch_stable.html
+torch==2.3.1; sys_platform == 'darwin' and platform_machine == 'arm64'
+torchaudio==2.3.1; sys_platform == 'darwin' and platform_machine == 'arm64'
+torchvision==0.18.1; sys_platform == 'darwin' and platform_machine == 'arm64'
+
+# Linux torch
+-f https://download.pytorch.org/whl/torch_stable.html
+torch==2.3.1+cpu; sys_platform == 'linux'
+torchaudio==2.3.1+cpu; sys_platform == 'linux'
+torchvision==0.18.1+cpu; sys_platform == 'linux'

@@ -10,8 +10,7 @@ RUN apt-get update && \
 COPY requirements.txt ./
 
 # Install PyTorch and other Python dependencies
-RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu && \
-    pip install --no-cache-dir --default-timeout=600 -r requirements.txt
+RUN pip install --no-cache-dir --default-timeout=600 -r requirements.txt
 
 COPY wait-for-postgres.sh /wait-for-postgres.sh
 
