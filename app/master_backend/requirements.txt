@@ -14,3 +14,4 @@ nemoguardrails[openai]==0.8.2
 sentence_transformers
 langfuse
 tabulate
+nltk==3.8.1
