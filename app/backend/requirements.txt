@@ -13,4 +13,4 @@ pgvector
 langchain-community
 unstructured
 libmagic
-nltk==3.8.1
+nltk
