@@ -38,7 +38,7 @@ services:
       - "5555:5555"
 
   langfuse:
-    image: docker pull ghcr.io/langfuse/langfuse:sha-23150b6
+    image: ghcr.io/langfuse/langfuse:sha-23150b6
     restart: always
     environment:
       DATABASE_URL: postgresql://admin:admin@postgres:5432/vectordb
