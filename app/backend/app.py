@@ -7,7 +7,7 @@ import redis
 from dotenv import find_dotenv, load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from langchain.vectorstores.pgvector import PGVector
+from langchain_postgres import PGVector
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
@@ -25,7 +25,7 @@ db_port = os.getenv("DB_PORT", "5432")
 db_name = os.getenv("DB_NAME", "restaurant")
 
 CONNECTION_STRING = (
-    f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+    f"postgresql+psycopg://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 )
 
 logging.basicConfig(level=logging.INFO)

@@ -19,7 +19,7 @@ db_port = os.getenv("DB_PORT", "5432")
 db_name = os.getenv("DB_NAME", "vectordb")
 
 CONNECTION_STRING = (
-    f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+    f"postgresql+psycopg://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 )
 retriever = create_retriever(CONNECTION_STRING)
 
