@@ -41,7 +41,7 @@ Question: {question}
 prompt = PromptTemplate(template=template, input_variables=["context", "question"])
 
 embedding = OpenAIEmbeddings()
-model = ChatOpenAI()
+model = ChatOpenAI(model="gpt-4o-mini")
 
 vectorstore = Chroma.from_documents(chunks, embedding)
 retriever = vectorstore.as_retriever()

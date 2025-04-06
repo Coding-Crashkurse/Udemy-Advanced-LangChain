@@ -183,10 +183,10 @@ classification_template = PromptTemplate.from_template(
     Classification:"""
 )
 
-classification_chain = classification_template | ChatOpenAI() | StrOutputParser()
+classification_chain = classification_template | ChatOpenAI(model="gpt-4o-mini") | StrOutputParser()
 
 
-CONNECTION_STRING = "postgresql+psycopg2://admin:admin@127.0.0.1:5432/vectordb"
+CONNECTION_STRING = "postgresql+psycopg://admin:admin@127.0.0.1:5432/vectordb"
 retriever = create_retriever(CONNECTION_STRING)
 
 rephrase_template = """Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language.
@@ -222,7 +222,7 @@ If you can´t answer the question with the context, just answer: "I am sorry, I 
 Question: {question}
 """
 prompt = ChatPromptTemplate.from_template(template)
-model = ChatOpenAI()
+model = ChatOpenAI(model="gpt-4o-mini")
 
 rerank_chain = RunnablePassthrough.assign(context=RunnableLambda(rerank_documents))
 model_chain = prompt | model | StrOutputParser()
@@ -240,7 +240,7 @@ SQL Query:"""
 prompt = ChatPromptTemplate.from_template(template)
 
 
-CONNECTION_STRING = "postgresql+psycopg2://admin:admin@127.0.0.1:5432/vectordb"
+CONNECTION_STRING = "postgresql+psycopg://admin:admin@127.0.0.1:5432/vectordb"
 db = SQLDatabase.from_uri(CONNECTION_STRING)
 
 
@@ -274,7 +274,7 @@ def run_query(query):
     return db.run(query)
 
 
-model = ChatOpenAI()
+model = ChatOpenAI(model="gpt-4o-mini")
 
 sql_response = (
     RunnablePassthrough.assign(schema=get_schema)

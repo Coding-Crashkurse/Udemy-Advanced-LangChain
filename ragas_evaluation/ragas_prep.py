@@ -147,7 +147,7 @@ class RAGASEvaluator:
             self.data["answer"].append(answer)
 
             contexts = [
-                doc.page_content for doc in self.retriever.get_relevant_documents(query)
+                doc.page_content for doc in self.retriever.invoke(query)
             ]
             self.data["contexts"].append(contexts)
 
