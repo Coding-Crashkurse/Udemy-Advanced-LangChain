@@ -12,7 +12,8 @@ Below is a list of Jupyter notebooks included in this course:
 - `01_LCEL_And_Runnables.ipynb`: Introduction to LangChain's expression language with real-world examples.
 - `02_LCEL_ChatWithHistory.ipynb`: Implementing chat with history in LangChain.
 - `03_IndexingAPI.ipynb`: Exploring LangChain's indexing API.
-- `04_Ragas.ipynb`: Evaluate RAG Pipelines with the RAGAS Framework.
+- `04_Ragas_0.1.x.ipynb`: Evaluate RAG Pipelines with the RAGAS Framework (0.1.x).
+- `04_Ragas_0.2.x.ipynb`: Evaluate RAG Pipelines with the RAGAS Framework (0.2.x).
 - `05_BetterChunking.ipynb`: Techniques for improving text chunking.
 - `06_BetterEmbeddings.ipynb`: Best practices for creating embeddings.
 - `07_BetterQueries.ipynb`: Improving query formulation in RAG.
