@@ -3,7 +3,7 @@ from typing import Generic, Iterator, Optional, Sequence, TypeVar
 
 from langchain.retrievers import ParentDocumentRetriever
 from langchain.schema import Document
-from langchain_community.vectorstores.pgvector import PGVector
+from langchain_postgres import PGVector
 from langchain_core.stores import BaseStore
 from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -128,10 +128,10 @@ def create_retriever(
 
     vectorstore = PGVector(
         collection_name="vectordb",
-        connection_string=database_url,
-        embedding_function=embeddings,
+        connection=database_url,
+        embeddings=embeddings,
+        use_jsonb=True,
     )
-
     text_splitter_child = RecursiveCharacterTextSplitter(
         chunk_size=150, chunk_overlap=20
     )

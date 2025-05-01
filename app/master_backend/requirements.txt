@@ -5,10 +5,12 @@ requests
 openai
 tiktoken
 langchain
+langchain-postgres
 langchain_openai
 python-dotenv
 postgres
 psycopg2-binary
+psycopg[binary]==3.1.*
 pgvector
 nemoguardrails[openai]==0.8.2
 sentence_transformers

@@ -9,8 +9,10 @@ langchain_openai
 python-dotenv
 postgres
 psycopg2-binary
+psycopg[binary]==3.1.*
 pgvector
 langchain-community
+langchain-postgres
 unstructured
 libmagic
 nltk

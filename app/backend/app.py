@@ -38,10 +38,11 @@ class Question(BaseModel):
 
 embeddings = OpenAIEmbeddings()
 chat = ChatOpenAI(temperature=0)
-store = PGVector(
-    collection_name=db_name,
-    connection_string=CONNECTION_STRING,
-    embedding_function=embeddings,
+vectorstore = PGVector(
+    collection_name="vectordb",
+    connection=CONNECTION_STRING,
+    embeddings=embeddings,
+    use_jsonb=True,
 )
 
 retriever = store.as_retriever()
