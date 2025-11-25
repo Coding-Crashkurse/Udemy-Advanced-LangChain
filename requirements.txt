@@ -150,6 +150,7 @@ protobuf==6.31.1
 psutil==7.0.0
 psycopg==3.2.9
 psycopg-binary==3.2.9
+psycopg2-binary==2.9.11
 psycopg-pool==3.2.6
 pure_eval==0.2.3
 py_rust_stemmers==0.1.5
