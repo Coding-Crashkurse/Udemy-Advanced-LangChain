@@ -2,7 +2,7 @@ import logging
 from typing import Generic, Iterator, Optional, Sequence, TypeVar
 
 from langchain.retrievers import ParentDocumentRetriever
-from langchain.schema import Document
+from langchain_core.documents import Document
 from langchain_postgres import PGVector
 from langchain_core.stores import BaseStore
 from langchain_openai import OpenAIEmbeddings

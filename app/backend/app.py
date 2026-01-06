@@ -47,7 +47,7 @@ vectorstore = PGVector(
 
 retriever = store.as_retriever()
 
-from langchain.prompts.prompt import PromptTemplate
+from langchain_core.prompts.prompt import PromptTemplate
 
 rephrase_template = """Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language.
 
