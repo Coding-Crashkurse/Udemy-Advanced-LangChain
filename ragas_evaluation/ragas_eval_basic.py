@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from langchain.schema.output_parser import StrOutputParser
 from langchain.schema.runnable import RunnablePassthrough
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders.directory import DirectoryLoader
 from langchain_community.vectorstores.chroma import Chroma
 from langchain_core.prompts import PromptTemplate
