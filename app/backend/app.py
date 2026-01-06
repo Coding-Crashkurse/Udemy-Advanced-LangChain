@@ -38,7 +38,7 @@ class Question(BaseModel):
 
 embeddings = OpenAIEmbeddings()
 chat = ChatOpenAI(temperature=0)
-vectorstore = PGVector(
+store = PGVector(
     collection_name="vectordb",
     connection=CONNECTION_STRING,
     embeddings=embeddings,
@@ -47,15 +47,13 @@ vectorstore = PGVector(
 
 retriever = store.as_retriever()
 
-from langchain_core.prompts.prompt import PromptTemplate
-
 rephrase_template = """Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question, in its original language.
 
 Chat History:
 {chat_history}
 Follow Up Input: {question}
 Standalone question:"""
-REPHRASE_TEMPLATE = PromptTemplate.from_template(rephrase_template)
+REPHRASE_TEMPLATE = ChatPromptTemplate.from_template(rephrase_template)
 
 template = """Answer the question based only on the following context:
 {context}
