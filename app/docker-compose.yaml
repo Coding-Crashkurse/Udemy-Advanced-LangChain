@@ -38,10 +38,10 @@ services:
       - "5555:5555"
 
   langfuse:
-    image: ghcr.io/langfuse/langfuse:sha-23150b6
+    image: langfuse/langfuse:2
     restart: always
     environment:
-      DATABASE_URL: postgresql://admin:admin@postgres:5432/vectordb
+      DATABASE_URL: postgresql://admin:admin@postgres:5432/langfuse
       NEXTAUTH_URL: http://localhost:3000
       NEXTAUTH_SECRET: mysecret
       SALT: mysalt
